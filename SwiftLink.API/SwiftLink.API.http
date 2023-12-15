@@ -1,0 +1,6 @@
+@SwiftLink.API_HostAddress = http://localhost:5077
+
+GET {{SwiftLink.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
