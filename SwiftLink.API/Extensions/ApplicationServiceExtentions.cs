@@ -20,9 +20,17 @@ namespace SwiftLink.API.Extensions
                 options.UseSqlServer(config.GetConnectionString("DefaultConnection"));
             });
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy", policy =>
+                {
+                    policy.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:3000");
+                });
+            });
+
             services.AddAutoMapper(typeof(MappingProfiles).Assembly);
 
-            services.AddMediatR(config => config.RegisterServicesFromAssembly(typeof(Create.Handler).Assembly));
+            services.AddMediatR(config => config.RegisterServicesFromAssembly(typeof(Program).Assembly));
 
             services.AddFluentValidationAutoValidation();
 
