@@ -1,9 +1,7 @@
-using System.Globalization;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using SwiftLink.API.Core;
 using SwiftLink.API.Database;
-using SwiftLink.API.Features.Url;
 using SwiftLink.API.Services;
 
 namespace SwiftLink.API.Extensions

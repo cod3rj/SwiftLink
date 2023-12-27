@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using SwiftLink.API.Contracts;
 using SwiftLink.API.Database;
 using SwiftLink.API.Features.Account;
+using SwiftLink.API.Security;
 using SwiftLink.API.Services;
 
 namespace SwiftLink.API.Extensions
@@ -33,6 +34,8 @@ namespace SwiftLink.API.Extensions
             });
 
             services.AddScoped<ITokenService, TokenService>();
+
+            services.AddScoped<IUserAccessor, UserAccessor>();
 
             return services;
         }

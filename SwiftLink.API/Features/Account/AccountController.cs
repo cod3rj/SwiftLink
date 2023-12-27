@@ -68,5 +68,21 @@ namespace SwiftLink.API.Features.Account
             }
         }
 
+        [HttpGet("getuser")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetUser()
+        {
+            UserAccount.Query query = new();
+
+            Result<UserAccount.Response> result = await Mediator.Send(query);
+
+            if (result.IsSuccess)
+            {
+                return Ok(result.Value);
+            }
+
+            return BadRequest(result.Error);
+        }
+
     }
 }

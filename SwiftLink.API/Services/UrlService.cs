@@ -1,3 +1,4 @@
+using SwiftLink.API.Contracts;
 using SwiftLink.API.Database;
 using SwiftLink.API.Features.Url;
 
@@ -6,10 +7,12 @@ namespace SwiftLink.API.Services
     public class UrlService
     {
         private readonly DataContext _context;
+        private readonly IUserAccessor _userAccessor;
 
-        public UrlService(DataContext context)
+        public UrlService(DataContext context, IUserAccessor userAccessor)
         {
             _context = context;
+            _userAccessor = userAccessor;
         }
 
         public async Task<string> CreateShortUrl(string originalUrl)
@@ -27,7 +30,8 @@ namespace SwiftLink.API.Services
             {
                 OriginalUrl = originalUrl,
                 ShortenedUrl = shortUrl,
-                CreationDate = DateTime.UtcNow
+                CreationDate = DateTime.UtcNow,
+                AppUserId = _userAccessor.GetUsername()
             };
 
             _context.Urls.Add(url);
