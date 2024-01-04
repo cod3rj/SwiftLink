@@ -34,7 +34,11 @@ namespace SwiftLink.API.Extensions
 
             services.AddHttpContextAccessor();
 
+            services.AddDistributedMemoryCache();
+
             services.AddScoped<UrlService>();
+
+            services.AddScoped<FreeUsageLimiterFilter>();
 
             return services;
         }

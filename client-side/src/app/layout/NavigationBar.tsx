@@ -11,7 +11,7 @@ const NavigationBar = () => {
     }
 
     return (
-        <nav className="flex items-center m-auto fixed top-5 left-1/2 translate-x-[-50%] h-20 bg-opacity-100 bg-white p-4 rounded-xl backdrop-blur-md
+        <nav className="flex items-center m-auto fixed top-5 left-1/2 translate-x-[-50%] h-20 bg-opacity-80 bg-white p-4 rounded-xl backdrop-blur-md
                         justify-between w-[89%] shadow-2xl
         ">
             <Link to="/" className="flex items-center">

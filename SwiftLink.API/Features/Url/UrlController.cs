@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SwiftLink.API.Core;
+using SwiftLink.API.Services;
 
 namespace SwiftLink.API.Features.Url
 {
@@ -32,6 +34,7 @@ namespace SwiftLink.API.Features.Url
         }
 
         [HttpGet("{shortUrl}")]
+        [AllowAnonymous]
         public async Task<IActionResult> RedirectShortUrl(string shortUrl)
         {
             // Construct the full URL using the base URL of your application
@@ -55,6 +58,16 @@ namespace SwiftLink.API.Features.Url
 
         [HttpPost("url")]
         public async Task<IActionResult> Create([FromBody] Create.Request request)
+        {
+            Create.Command command = new(request);
+
+            return HandleResult(await Mediator.Send(command));
+        }
+
+        [HttpPost("free/url")]
+        [AllowAnonymous]
+        [ServiceFilter(typeof(FreeUsageLimiterFilter))] // Apply the limiter only to this action
+        public async Task<IActionResult> CreateFree([FromBody] Create.Request request)
         {
             Create.Command command = new(request);
 
