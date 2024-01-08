@@ -21,7 +21,7 @@ namespace SwiftLink.API.Features.Account
                     HttpOnly = true,
                     Expires = DateTime.UtcNow.AddDays(7),
                     SameSite = SameSiteMode.None,
-                    Secure = false
+                    Secure = true
                 };
 
                 Response.Cookies.Append("AuthToken", result.Value.Token, cookieOptions);
@@ -58,7 +58,22 @@ namespace SwiftLink.API.Features.Account
             // Check if the registration was successful
             if (result.IsSuccess)
             {
-                // Registration was successful, return a Created response with user information
+
+                // Set the authentication cookie
+                CookieOptions cookieOptions = new()
+                {
+                    HttpOnly = true,
+                    Expires = DateTime.UtcNow.AddDays(7),
+                    SameSite = SameSiteMode.None,
+                    Secure = true
+                };
+
+                Response.Cookies.Append("AuthToken", result.Value.Token, cookieOptions);
+
+                // Clear sensitive data from the result
+                result.Value.Token = string.Empty;
+
+                // Return a Created response with user information
                 return Created("registration successful", result.Value);
             }
             else
@@ -69,7 +84,6 @@ namespace SwiftLink.API.Features.Account
         }
 
         [HttpGet("getuser")]
-        [AllowAnonymous]
         public async Task<IActionResult> GetUser()
         {
             UserAccount.Query query = new();
@@ -82,6 +96,17 @@ namespace SwiftLink.API.Features.Account
             }
 
             return BadRequest(result.Error);
+        }
+
+        [HttpPost("logout")]
+        public IActionResult Logout()
+        {
+            // Expire the existing authentication cookie
+            Response.Cookies.Delete("AuthToken");
+
+            // Optionally, perform any additional cleanup or logging out logic
+
+            return Ok(new { message = "Logout successful" });
         }
 
     }

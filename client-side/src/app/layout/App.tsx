@@ -8,9 +8,12 @@ import { motion } from 'framer-motion';
 import Cursor from "../common/cursor/Cursor.tsx";
 import {useEffect, useState} from "react";
 import Loader from "../common/loader/Loader.tsx";
+import RootLayout from "../../features/_root/RootLayout.tsx";
+import Home from "../../features/_root/dashboard/Home.tsx";
+import PrivateRoute from "../hooks/PrivateRoute.tsx";
 
 const App = () => {
-    const [isLoading, setIsLoading] = useState(true)
+    const [isLoading, setIsLoading] = useState(false)
 
     useEffect(() => {
         // Simulate an asynchronous operation (e.g., fetching data) that takes time
@@ -39,6 +42,9 @@ const App = () => {
                         </Route>
 
                         {/* private routes */}
+                        <Route path="/auth/*" element={<PrivateRoute> <RootLayout/> </PrivateRoute>}>
+                            <Route path="home" element={<Home />} />
+                        </Route>
                     </Routes>
                 </main>
             )}

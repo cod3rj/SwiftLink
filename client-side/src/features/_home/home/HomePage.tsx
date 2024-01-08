@@ -1,15 +1,12 @@
 import React, {useState} from "react";
 import axios from "axios";
+import {useAuth} from "../../../app/hooks/AuthContext.tsx";
 
 const HomePage = () => {
     const [input, setInput] = useState("")
     const [response, setResponse] = useState("")
     const [showCopyNotification, setShowCopyNotification] = useState(false)
-
-    const isAuthenticated = () => {
-        // Check if the authentication cookie exists
-        return document.cookie.split(';').some((cookie) => cookie.trim().startsWith('authToken='))
-    }
+    const { isAuthenticated } = useAuth();
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setInput(e.target.value)
@@ -27,7 +24,12 @@ const HomePage = () => {
     const handleSubmit = async (urlType: string) => {
         try {
             console.log('URL Type:', urlType);
-            let endpoint = 'http://localhost:5000/url'; // Default to the authenticated and limited version
+            let endpoint = "";
+
+            if (urlType === 'authenticated')
+            {
+                endpoint = 'http://localhost:5000/url'; // Default to the authenticated and limited version
+            }
 
             if (urlType === 'unauthenticated') {
                 endpoint = 'http://localhost:5000/free/url'; // Use the unauthenticated version
@@ -57,7 +59,7 @@ const HomePage = () => {
                     <input className="p-2 rounded-xl text-dark-1" type="text" name="OriginalUrl" id="OriginalUrl" value={input}
                            onChange={handleChange}/>
 
-                    {isAuthenticated() ? (
+                    {isAuthenticated ? (
                         <button
                             className="border-2 p-3 text-white hover:bg-cyan-300 hover:text-dark-1 transition"
                             onClick={() => handleSubmit('authenticated')}

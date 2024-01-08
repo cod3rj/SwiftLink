@@ -31,6 +31,7 @@ namespace SwiftLink.API.Features.Account
             public string Username { get; init; }
             public string DisplayName { get; init; }
             public string Email { get; set; }
+            public string Token { get; set; } = default!;
         }
 
         public class QueryValidator : AbstractValidator<Request>
@@ -51,9 +52,13 @@ namespace SwiftLink.API.Features.Account
         public class Handler : IRequestHandler<Query, Result<Response>>
         {
             private readonly UserManager<AppUser> _userManager;
-            public Handler(UserManager<AppUser> userManager)
+            private readonly DataContext _dbContext;
+            private readonly ITokenService _tokenService;
+            public Handler(UserManager<AppUser> userManager, DataContext dbContext, ITokenService tokenService)
             {
                 _userManager = userManager;
+                _dbContext = dbContext;
+                _tokenService = tokenService;
             }
 
             public async Task<Result<Response>> Handle(Query request, CancellationToken cancellationToken)
@@ -72,12 +77,27 @@ namespace SwiftLink.API.Features.Account
 
                 var result = await _userManager.CreateAsync(user, request.Data.Password);
 
-                return Result<Response>.Success(new Response
+                if (result.Succeeded)
                 {
-                    Username = user.UserName!,
-                    DisplayName = user.DisplayName!,
-                    Email = user.Email!,
-                });
+                    // Save changes to the database
+                    await _dbContext.SaveChangesAsync();
+
+                    // Generate a token for the registered user
+                    var token = _tokenService.CreateToken(user);
+
+                    return Result<Response>.Success(new Response
+                    {
+                        Username = user.UserName!,
+                        DisplayName = user.DisplayName!,
+                        Email = user.Email!,
+                        Token = token
+                    });
+                }
+                else
+                {
+                    // Handle the case where user creation failed
+                    return Result<Response>.Failure("User creation failed.");
+                }
             }
         }
 

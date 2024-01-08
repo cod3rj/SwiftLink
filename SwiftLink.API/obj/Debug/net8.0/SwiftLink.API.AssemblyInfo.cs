@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SwiftLink.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+aba7126cd66096669b4ebd5442c9f4864024ed4a")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+abdfee21e255060fc05d5003fd0b9aded03547c0")]
 [assembly: System.Reflection.AssemblyProductAttribute("SwiftLink.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SwiftLink.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

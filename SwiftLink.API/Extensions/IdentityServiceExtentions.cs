@@ -31,6 +31,14 @@ namespace SwiftLink.API.Extensions
                     ValidateAudience = false,
                     ValidateIssuer = false
                 };
+                option.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        context.Token = context.Request.Cookies["AuthToken"];
+                        return Task.CompletedTask;
+                    }
+                };
             });
 
             services.AddScoped<ITokenService, TokenService>();
